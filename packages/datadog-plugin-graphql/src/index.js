@@ -46,7 +46,10 @@ function createWrapExecute (tracer, config, defaultFieldResolver) {
 function createWrapParse (tracer, config) {
   return function wrapParse (parse) {
     return function parseWithTrace (source) {
+      const args = normalizeArgs(arguments)
       const span = startSpan(tracer, config, 'parse')
+
+      addVariableTags(tracer, config, span, args.variableValues)
 
       analyticsSampler.sample(span, config.analytics)
 
@@ -76,7 +79,10 @@ function createWrapParse (tracer, config) {
 function createWrapValidate (tracer, config) {
   return function wrapValidate (validate) {
     return function validateWithTrace (schema, document, rules, typeInfo) {
+      const args = normalizeArgs(arguments)
       const span = startSpan(tracer, config, 'validate')
+
+      addVariableTags(tracer, config, span, args.variableValues)
 
       analyticsSampler.sample(span, config.analytics)
 
